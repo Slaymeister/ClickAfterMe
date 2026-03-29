@@ -42,7 +42,7 @@ ClearTooltip() {
     ; Use if/else chain for reliable relational checks
     if (clickDelay >= 60000)
         ChangeClickDelay(60000)
-    else if (clickDelay >= 10000)
+    else if (clickDelay >= 60000)
         ChangeClickDelay(10000)
     else if (clickDelay >= 1000)
         ChangeClickDelay(1000)
@@ -76,7 +76,7 @@ ClearTooltip() {
         ChangeClickDelay(-50)
     else if (clickDelay <= 1000)
         ChangeClickDelay(-100)
-    else if (clickDelay <= 10000)
+    else if (clickDelay <= 60000)
         ChangeClickDelay(-1000)
     else if (clickDelay <= 60000)
         ChangeClickDelay(-10000)
@@ -210,6 +210,7 @@ ChangeClickDelay(ClickDelayModifier) {
     }
 
     if (isReplaying && replayTimer) {
+        SetTimer(replayTimer, 0)
         SetTimer(replayTimer, clickDelay)
     }
 
@@ -233,11 +234,6 @@ DoReplay() {
     ToolTip "Click " . (replayIndex + 1)
     ResetTooltipTimer()
     replayIndex++
-
-    ; Apply current delay after each click so changes during replay take effect immediately
-    if (replayTimer) {
-        SetTimer(replayTimer, clickDelay)
-    }
 }
 
 
