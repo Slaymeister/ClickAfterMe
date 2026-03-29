@@ -117,8 +117,13 @@ ClearTooltip() {
 
 ; Toggle recording hotkey: ALT-=
 !=:: {
-    global isRecording, clickLocations
-    isReplaying := false  ; Stop replaying if currently active
+    global isRecording, clickLocations, isReplaying
+    
+    if (isReplaying) {
+        isReplaying := false  ; Stop replaying if currently active
+        clickLocations := []
+        Sleep 100  ; Brief pause to ensure state changes before replaying
+    }
     
     if (isRecording) {
         ; Stop recording
@@ -152,7 +157,9 @@ ClearTooltip() {
 
 ; Replay hotkey: CTRL-=
 ^=:: {
-    global clickLocations, clickDelay, isReplaying, replayIndex, replayTimer
+    global clickLocations, clickDelay, isReplaying, replayIndex, replayTimer, isRecording
+    isRecording := false  ; Stop recording if currently active
+    Sleep 100  ; Brief pause to ensure state changes before replaying
     
     if (isReplaying) {
         ; Stop replaying
@@ -181,30 +188,31 @@ ClearTooltip() {
 }
 
 ChangeClickDelay(ClickDelayModifier) {
-    global clickDelay
-    
+    global clickDelay, isReplaying, replayTimer
+
     if (ClickDelayModifier = -99) {
-        ClickDelay := 250
+        clickDelay := 250
         ToolTip "Click delay reset " . clickDelay . " ms"
-    }
-    else {
+    } else {
         clickDelay += ClickDelayModifier
         if (clickDelay < 5) {
             clickDelay := 5
         }
-        If (clickDelay <= 1000) {
+
+        if (clickDelay <= 1000) {
             delayNum := clickDelay . " ms"
-        }
-        else if (clickDelay < 60000) {
+        } else if (clickDelay < 60000) {
             delayNum := clickDelay / 1000 . " s"
-        }
-        else {
+        } else {
             delayNum := clickDelay / 60000 . " min"
-       
-            
         }
         ToolTip "Click delay " . delayNum
     }
+
+    if (isReplaying && replayTimer) {
+        SetTimer(replayTimer, clickDelay)
+    }
+
     ResetTooltipTimer()
 }
 
@@ -225,6 +233,11 @@ DoReplay() {
     ToolTip "Click " . (replayIndex + 1)
     ResetTooltipTimer()
     replayIndex++
+
+    ; Apply current delay after each click so changes during replay take effect immediately
+    if (replayTimer) {
+        SetTimer(replayTimer, clickDelay)
+    }
 }
 
 

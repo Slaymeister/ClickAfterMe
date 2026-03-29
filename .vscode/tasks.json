@@ -6,14 +6,25 @@
         {
             "label": "ClickAfterMe Build",
             "type": "shell",
-            "command": "& 'C:\\Program Files\\AutoHotKey\\Compiler\\Ahk2Exe.exe' /in '${workspaceFolder}\\src\\ClickAfterMe.ahk' /out '${workspaceFolder}\\bin\\ClickAfterMe.exe'",
+            "command": "C:\\Program Files\\AutoHotKey\\Compiler\\Ahk2Exe.exe",
+            "args": [
+                "/in",
+                "${workspaceFolder}\\src\\ClickAfterMe.ahk",
+                "/out",
+                "${workspaceFolder}\\bin\\ClickAfterMe.exe"
+            ],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
                 "panel": "new"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
             }
-        },
+        }
         {
             "label": "ClickAfterMe Clean",
             "type": "shell",
@@ -28,6 +39,5 @@
                 "panel": "new"
             }
         }
-            
     ]
 }
