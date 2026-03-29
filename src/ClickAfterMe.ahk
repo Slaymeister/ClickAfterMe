@@ -8,7 +8,7 @@ clickDelay := 250  ; Default Delay between clicks in milliseconds
 replayIndex := 0
 replayTimer := 0
 tooltipTimer := 0  ; Timer for clearing tooltips
-tooltipTimeout := 10000  ; 10 seconds in milliseconds
+tooltipTimeout := 5000  ; 5 seconds in milliseconds
 ToolTip "CAM - Start"
 ResetTooltipTimer()
 
@@ -118,6 +118,7 @@ ClearTooltip() {
 ; Toggle recording hotkey: ALT-=
 !=:: {
     global isRecording, clickLocations
+    isReplaying := false  ; Stop replaying if currently active
     
     if (isRecording) {
         ; Stop recording
@@ -220,9 +221,8 @@ DoReplay() {
     }
     
     clickPos := clickLocations[replayIndex + 1]
-    MouseMove(clickPos.x, clickPos.y)
-    Click
-    ToolTip "Playing click " . (replayIndex + 1)
+    Click(clickPos.x, clickPos.y)
+    ToolTip "Click " . (replayIndex + 1)
     ResetTooltipTimer()
     replayIndex++
 }
