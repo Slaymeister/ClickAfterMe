@@ -155,6 +155,8 @@ ClearTooltip() {
     }
 }
 
+
+
 ; Replay hotkey: CTRL-=
 ^=:: {
     global clickLocations, clickDelay, isReplaying, replayIndex, replayTimer, isRecording
